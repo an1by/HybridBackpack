@@ -5,6 +5,7 @@ import io.papermc.paper.datacomponent.item.CustomModelData;
 import net.aniby.hybrid.backpack.gui.BackpackGUI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.inventory.CraftInventoryCrafting;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -47,7 +48,9 @@ public class HybridBackpackPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onClickEvent(InventoryClickEvent event) {
-        if (event.isShiftClick() && event.getWhoClicked() instanceof Player player) {
+        if (event.isShiftClick()
+                && event.getWhoClicked() instanceof Player player
+                && event.getInventory() instanceof CraftInventoryCrafting) {
             ItemStack itemStack = event.getCurrentItem();
             Backpack backpack = getBackpack(itemStack);
 

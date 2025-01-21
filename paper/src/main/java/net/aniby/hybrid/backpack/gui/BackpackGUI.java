@@ -99,10 +99,11 @@ public class BackpackGUI implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onInventoryClick(final InventoryClickEvent event) {
-        if (Objects.equals(event.getClickedInventory(), this.inventory)) {
+        if (Objects.equals(event.getClickedInventory(), this.inventory)
+                || Objects.equals(event.getInventory(), this.inventory)) {
             ItemStack current = event.getCurrentItem();
             ItemStack cursor = event.getCursor();
-            if (current != null && current.isSimilar(LOCKER_ITEM)
+            if (current != null && (current.isSimilar(LOCKER_ITEM) || this.isBackpack(current))
                     || cursor.isSimilar(LOCKER_ITEM) || this.isBackpack(cursor)) {
                 event.setCancelled(true);
             }
