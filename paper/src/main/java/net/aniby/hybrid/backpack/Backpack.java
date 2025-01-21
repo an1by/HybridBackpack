@@ -14,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class Backpack {
     final File configurationFile;
     @Setter
     List<ItemStack> items;
-    final int size = 27;
+    final int size = 16;
 
     public Backpack(Component name, String identifier) {
         this.name = name;
@@ -42,9 +41,7 @@ public class Backpack {
             FileConfiguration configuration = YamlConfiguration.loadConfiguration(
                     this.configurationFile
             );
-            this.items = new ArrayList<>(
-                    (List<ItemStack>) configuration.getList("items")
-            );
+            this.items = (List<ItemStack>) configuration.getList("items");
         } else {
             this.items = Collections.nCopies(this.size, ItemStack.empty());
             this.save();

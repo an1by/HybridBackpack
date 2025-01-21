@@ -14,9 +14,12 @@ public class BackpackCommand implements BasicCommand {
     @Override
     public void execute(io.papermc.paper.command.brigadier.CommandSourceStack commandSourceStack, String[] args) {
         Player player = (Player) commandSourceStack.getSender();
-        ItemStack itemStack = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-        itemStack.setData(DataComponentTypes.CUSTOM_MODEL_DATA, CustomModelData.customModelData()
-                .addString("backpack").addString(UUID.randomUUID().toString()).build());
+        ItemStack itemStack = new ItemStack(Material.STRUCTURE_BLOCK);
+        itemStack.setData(DataComponentTypes.CUSTOM_MODEL_DATA,
+                CustomModelData.customModelData()
+                        .addString("backpack")
+                        .addString(UUID.randomUUID().toString())
+                        .build());
         player.getInventory().addItem(itemStack);
     }
 }
