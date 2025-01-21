@@ -53,4 +53,8 @@ public class Backpack {
         configuration.set("items", this.items);
         configuration.save(configurationFile);
     }
+
+    public void delete() {
+        this.configurationFile.delete();
+    }
 }

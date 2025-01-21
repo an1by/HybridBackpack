@@ -1,11 +1,10 @@
 package net.aniby.hybrid.backpack.gui;
 
-import io.papermc.paper.datacomponent.DataComponentTypes;
-import io.papermc.paper.datacomponent.item.CustomModelData;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import net.aniby.hybrid.backpack.Backpack;
+import net.aniby.hybrid.backpack.BackpackCheck;
 import net.aniby.hybrid.backpack.HybridBackpackPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,7 +21,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -69,29 +67,11 @@ public class BackpackGUI implements Listener {
         player.openInventory(this.inventory);
     }
 
-    private boolean isBackpack(@NotNull ItemStack itemStack) {
-        if (itemStack.getType() == Material.STRUCTURE_BLOCK) {
-            CustomModelData customModelData = itemStack.getData(DataComponentTypes.CUSTOM_MODEL_DATA);
-            return customModelData != null && customModelData.strings().contains("backpack");
-        }
-        return false;
-    }
-
-    private boolean isSameBackpack(@NotNull ItemStack itemStack) {
-        if (itemStack.getType() == Material.STRUCTURE_BLOCK) {
-            CustomModelData customModelData = itemStack.getData(DataComponentTypes.CUSTOM_MODEL_DATA);
-            return customModelData != null
-                    && customModelData.strings().contains(this.backpack.identifier())
-                    && customModelData.strings().contains("backpack");
-        }
-        return false;
-    }
-
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onInventoryDrag(final InventoryDragEvent event) {
         if (event.getInventory().equals(this.inventory)) {
             ItemStack cursor = event.getCursor();
-            if (cursor != null && (cursor.isSimilar(LOCKER_ITEM) || this.isBackpack(cursor))) {
+            if (cursor != null && (cursor.isSimilar(LOCKER_ITEM) || BackpackCheck.isBackpack(cursor))) {
                 event.setCancelled(true);
             }
         }
@@ -99,12 +79,19 @@ public class BackpackGUI implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onInventoryClick(final InventoryClickEvent event) {
-        if (Objects.equals(event.getClickedInventory(), this.inventory)
-                || Objects.equals(event.getInventory(), this.inventory)) {
+        if (Objects.equals(event.getInventory(), this.inventory)) {
+            if (event.isShiftClick()) {
+                ItemStack current = event.getCurrentItem();
+                if (current != null && BackpackCheck.isBackpack(current)) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+        }
+
+        if (Objects.equals(event.getClickedInventory(), this.inventory)) {
             ItemStack current = event.getCurrentItem();
-            ItemStack cursor = event.getCursor();
-            if (current != null && (current.isSimilar(LOCKER_ITEM) || this.isBackpack(current))
-                    || cursor.isSimilar(LOCKER_ITEM) || this.isBackpack(cursor)) {
+            if (BackpackCheck.isBackpack(event.getCursor()) || (current != null && current.isSimilar(LOCKER_ITEM))) {
                 event.setCancelled(true);
             }
         }
@@ -129,7 +116,7 @@ public class BackpackGUI implements Listener {
 
     @EventHandler
     private void onDrop(final PlayerDropItemEvent event) {
-        if (this.isSameBackpack(event.getItemDrop().getItemStack())) {
+        if (BackpackCheck.isSameBackpack(event.getItemDrop().getItemStack(), this.backpack)) {
             this.inventory.close();
             this.close();
         }
@@ -137,7 +124,7 @@ public class BackpackGUI implements Listener {
 
     @EventHandler
     private void onDeath(final PlayerDeathEvent event) {
-        if (event.getDrops().stream().anyMatch(this::isSameBackpack)) {
+        if (event.getDrops().stream().anyMatch(item -> BackpackCheck.isSameBackpack(item, this.backpack))) {
             this.close();
         }
     }
