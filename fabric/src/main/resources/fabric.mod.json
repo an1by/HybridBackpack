@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "hybridbackpack",
+  "version": "${mod_version}",
+  "name": "Hybrid Backpack",
+  "description": "Simple backpack based on PaperMC <-> FabricMC plugin messaging",
+  "authors": [
+    "An1by"
+  ],
+  "contact": {
+    "sources": "https://github.com/an1by/HybridBackpack",
+    "issues": "https://github.com/an1by/HybridBackpack/issues",
+    "homepage": "https://aniby.net/"
+  },
+  "license": "All Rights Reserved",
+  "icon": "assets/hybridbackpack/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.aniby.hybrid.backpack.HybridBackpackMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": "${fabric_loader_dependency}",
+    "fabric": "*",
+    "minecraft": [
+      "1.21.4"
+    ],
+    "java": ">=21"
+  },
+  "breaks": {
+    "fabric-api": "${fabric_api_dependency_breaks}"
+  },
+  "suggests": {
+    "fabric-permissions-api-v0": "*"
+  }
+}

@@ -1,0 +1,15 @@
+name: hybridbackpack
+main: net.aniby.hybrid.backpack.HybridBackpackPlugin
+bootstrapper: de.maxhenkel.voicechat.VoicechatBootstrap
+version: ${mod_version}
+description: Simple backpack based on PaperMC <-> FabricMC plugin messaging
+authors:
+  - An1by
+website: https://aniby.net/
+api-version: ${minecraft_version}
+prefix: hybridbackpack
+load: STARTUP
+permissions:
+  aniby.backpack.open:
+    description: Open backpack
+    default: true
