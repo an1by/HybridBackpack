@@ -1,6 +1,6 @@
 name: hybridbackpack
 main: net.aniby.hybrid.backpack.HybridBackpackPlugin
-bootstrapper: de.maxhenkel.voicechat.VoicechatBootstrap
+bootstrapper: net.aniby.hybrid.backpack.HybridBackpackBootstrap
 version: ${mod_version}
 description: Simple backpack based on PaperMC <-> FabricMC plugin messaging
 authors:
